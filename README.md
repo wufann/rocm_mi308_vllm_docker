@@ -4,9 +4,7 @@ MI308 ROCm vllm inference dockerfile and poplular LLM models tuning files(.csv f
 ```
   Dockerfile                 # Dockerfile
 
-  tuned_gemm_csv/            # fp16/fp8 GEMM tuned files 
-
-  pytorch_afo_testkit/       # GEMM tune tools
+  tuned_gemm_csv/            # fp16/fp8 GEMM tuned files
 ```
 
 tuning files(.csv format) suppot model:
@@ -69,3 +67,6 @@ ENV PYTORCH_TUNABLEOP_FILENAME=/app/tuned_gemm_csv/afo_tune_device_%d_full.csv
 ENV PYTORCH_TUNABLEOP_TUNING=0
 ENV PYTORCH_TUNABLEOP_ENABLED=0
 ```
+
+## Note
+`PYTORCH_TUNABLEOP_ENABLED` is disabled by default, you can export PYTORCH_TUNABLEOP_ENABLED=1 to enable tuning files.

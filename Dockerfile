@@ -1,7 +1,7 @@
 ##BASE IMAGE:
 ARG BASE_IMAGE="rocm/pytorch:rocm6.3_ubuntu22.04_py3.10_pytorch_release_2.5.0_preview"
 
-FROM ${BASE_IMAGE} as base
+FROM ${BASE_IMAGE} as BASE
 USER root
 
 RUN mkdir /app
