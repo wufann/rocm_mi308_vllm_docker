@@ -7,7 +7,7 @@ MI308 ROCm vllm inference dockerfile and poplular LLM models tuning files(.csv f
   tuned_gemm_csv/            # fp16/fp8 GEMM tuned files
 ```
 
-tuning files(.csv format) suppot model:
+tuning files(.csv format) support models:
 | Model | DataType | TP |
 |----------|----------|----------|
 | Qwen2-7B| fp16/fp8 | 1 2 |
@@ -17,9 +17,16 @@ tuning files(.csv format) suppot model:
 | Mixtral-8x7B| fp16/fp8 | 1 2 |
 | Mixtral-8x22B| fp16/fp8 | 2 4 8 |
 
-## Build docker images
+## How to get docker images
+You can get the images by **docker build** or by directly **docker pull** the image already on docker hub
+### 1: build docker images by Dockerfile
 ```
-docker build -f Dockerfile -t rocm_vllm:rocm6.3_mi308_ubuntu22.04_py3.10_vllm_0.6.4 .
+docker build -f Dockerfile -t fanwu103/mi308_inference:rocm6.3.1_ubuntu22.04_py3.10_vllm_0.6.5 .
+```
+
+### 2. pull images from docker hub
+```
+docker pull fanwu103/mi308_inference:rocm6.3.1_ubuntu22.04_py3.10_vllm_0.6.5
 ```
 
 ## AI Software VERSION:
@@ -34,7 +41,7 @@ docker build -f Dockerfile -t rocm_vllm:rocm6.3_mi308_ubuntu22.04_py3.10_vllm_0.
 - - branch: main
 - - commit: 7153673c1a3c7753c38e4c10ef2c98a02be5f778
 
-## ROCm VERSION:
+## ROCm Lib VERSION:
 - rocm-dev VERSION: 6.3.1.60301-40~22.04
 - rocm-device-libs VERSION: 1.0.0.60301-40~22.04
 - rocm-libs VERSION: 6.3.1.60301-40~22.04
