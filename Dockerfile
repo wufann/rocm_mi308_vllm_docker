@@ -6,14 +6,15 @@ FROM ${BASE_IMAGE} as BASE
 USER root
 
 RUN mkdir /app
+RUN mkdir /install
+RUN rm -rf /var/lib/jenkins/*
 ARG COMMON_WORKDIR=/app/
 WORKDIR ${COMMON_WORKDIR}
 
 COPY ./Dockerfile ${COMMON_WORKDIR}
 COPY ./tuned_gemm_csv ${COMMON_WORKDIR}/tuned_gemm_csv
 
-RUN pip install text_generation==0.7.0 simple_parsing==0.1.5 dashscope==1.18.0 loguru==0.7.2 prettytable==3.10.0  modelscope matplotlib jsonschema cloudpickle
-
+RUN pip install text_generation==0.7.0 simple_parsing==0.1.5 dashscope==1.18.0 loguru==0.7.2 prettytable==3.10.0 pybind11  modelscope matplotlib jsonschema cloudpickle
 
 ARG ARG_PYTORCH_ROCM_ARCH="gfx942"
 ENV PYTORCH_ROCM_ARCH=${ARG_PYTORCH_ROCM_ARCH}
@@ -28,7 +29,9 @@ RUN pip uninstall -y triton \
     && cd triton \
     && git checkout ${TRITON_BRANCH} \
     && cd python \
-    && pip install .
+    && python3 setup.py bdist_wheel --dist-dir=/install \
+    && pip install /install/triton*.whl \
+    && cd ../../ && rm -rf triton
 
 ARG FA_REPO="https://github.com/ROCm/flash-attention.git"
 ARG FA_COMMIT="7153673c1a3c7753c38e4c10ef2c98a02be5f778"
@@ -38,7 +41,9 @@ RUN pip uninstall -y flash-attn \
     && cd flash-attention \
     && git checkout ${FA_COMMIT} \
     && git submodule update --init \
-    && MAX_JOBS=64 GPU_ARCHS=${PYTORCH_ROCM_ARCH} python setup.py install
+    && MAX_JOBS=64 GPU_ARCHS=${PYTORCH_ROCM_ARCH} python setup.py bdist_wheel --dist-dir=/install \
+    && pip install /install/flash*.whl \
+    && cd ../ && rm -rf flash-attention
 
 ARG VLLM_REPO="https://github.com/ROCm/vllm.git"
 ARG VLLM_BRANCH="moe_final_v0.6.0_Nov19"
